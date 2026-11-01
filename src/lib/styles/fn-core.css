@@ -403,6 +403,12 @@ textarea:disabled {
   cursor: not-allowed;
 }
 
+/* No browser margins on text: spacing comes from fn-m*, fn-space-y-* and scoped CSS.
+   Zero specificity, so all of those win. */
+:where(p, h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+}
+
 /* --- Headings --- */
 h1 {
   font-size: 2.25rem;
