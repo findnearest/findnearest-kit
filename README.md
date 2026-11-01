@@ -9,13 +9,15 @@ Shared FindNearest UI for Svelte 5 apps:
   copy.
 - **`UpdateBanner`**: the "new version available" prompt every SvelteKit app shows when a new
   build is deployed.
+- **`AccountBlock`, `AccountMenu`, `themeState`**: the logged-in user, the dark mode switch and
+  sign out, in the same place in every app.
 
 ## Install
 
 Installed from GitHub at a tag (not published to npm):
 
 ```bash
-bun add github:findnearest/findnearest-kit#v0.2.4
+bun add github:findnearest/findnearest-kit#v0.2.5
 ```
 
 Requires `svelte` 5.20 or later. Upgrading means bumping the tag.
@@ -38,7 +40,8 @@ or, when the app has global rules of its own that must sit at a set point in the
 ```
 
 **Dark mode:** set `data-mode="dark"` on `<html>` (before first paint, from `localStorage.theme`
-or the system setting). Every token switches; `color-scheme` follows.
+or the system setting). Every token switches; `color-scheme` follows. The switch itself is
+`AccountBlock` or `AccountMenu`.
 
 **Colours in app CSS:** use the tokens, never a bare hex, and dark mode comes for free.
 
@@ -80,6 +83,31 @@ nobody loses a half-finished edit. In dev the build version never changes, so it
 - Needs SvelteKit 2.12 or later (`$app/state`) and the base CSS: its colours are the kit tokens
   (`bg-inverse`, `on-solid`, `primary-600`, `warning-300`), so it follows dark mode.
 - `show` forces it on or off, for demos and tests (`bun run dev`, then `/update-banner`).
+
+## Use AccountBlock and AccountMenu
+
+The user, dark mode and sign out go together, and never as icons taking up header space:
+
+- **An app with a sidebar:** `AccountBlock` at the foot of the sidebar and the drawer.
+- **An app with a row of links across the top:** `AccountMenu` at the right of the header, an
+  avatar button that opens the same block.
+
+```svelte
+<script lang="ts">
+	import { AccountMenu } from 'findnearest-kit';
+</script>
+
+<AccountMenu name={user.name ?? user.email} email={user.email} onSignOut={signOut} />
+```
+
+- `href` makes the name row a link (`active` marks it as the current page; `onnavigate` lets a
+  drawer close). `extra` is a snippet for anything app-specific, such as a role badge.
+- `AccountBlock` has no divider or outer spacing, so the sidebar sets its own.
+- Needs the base CSS, and the first-paint script from *Base CSS* above: `themeState` starts from
+  the `data-mode` that script set, and only writes it when someone switches.
+- `themeState.toggle()`, `themeState.setMode()` and `themeState.mode` are there if an app needs
+  the mode itself. Don't keep a local copy.
+- `bun run dev`, then `/account`, shows both in every variant.
 
 ## Use GeocoderSearch
 
