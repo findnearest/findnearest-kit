@@ -419,11 +419,6 @@ select:focus {
   box-shadow: none;
 }
 
-/* No browser margins on the text, or it sits below the icon. Zero specificity, so fn-mt-* still apply. */
-:where(.fn-alert) :where(h1, h2, h3, h4, h5, h6, p) {
-  margin: 0;
-}
-
 .fn-alert-message {
   display: flex;
   flex-direction: column;
