@@ -2755,21 +2755,24 @@ table {
   color: var(--fn-color-secondary-300);
 }
 
-/* --- Toggle (Switch) --- */
+/* --- Toggle (Switch) ---
+   Goes on the checkbox itself, not a wrapping label. The input in each selector is what beats
+   the base input[type='checkbox'] rules above, which would otherwise size it as a checkbox. */
 
-.fn-toggle {
+input.fn-toggle {
   appearance: none;
   position: relative;
   width: 2.75rem;
   height: 1.5rem;
+  border: none;
   border-radius: var(--fn-radius-full);
-  background-color: var(--fn-color-surface-300);
+  background-color: var(--fn-color-border-strong);
   cursor: pointer;
   transition: background-color 200ms;
   flex-shrink: 0;
 }
 
-.fn-toggle::after {
+input.fn-toggle::after {
   content: '';
   position: absolute;
   top: 2px;
@@ -2782,21 +2785,18 @@ table {
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
-.fn-toggle:checked {
+input.fn-toggle:checked {
   background-color: var(--fn-color-primary-500);
+  background-image: none;
 }
 
-.fn-toggle:checked::after {
+input.fn-toggle:checked::after {
   transform: translateX(1.25rem);
 }
 
-.fn-toggle:focus {
+input.fn-toggle:focus {
   outline: 2px solid var(--fn-color-primary-500);
   outline-offset: 2px;
-}
-
-:where([data-mode='dark'], [data-mode='dark'] *) .fn-toggle {
-  background-color: var(--fn-color-surface-600);
 }
 
 /* --- Range Slider --- */
