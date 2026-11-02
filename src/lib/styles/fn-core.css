@@ -2763,7 +2763,7 @@ table {
   width: 2.75rem;
   height: 1.5rem;
   border-radius: var(--fn-radius-full);
-  background-color: var(--fn-color-surface-300);
+  background-color: var(--fn-color-border-strong);
   cursor: pointer;
   transition: background-color 200ms;
   flex-shrink: 0;
@@ -2793,10 +2793,6 @@ table {
 .fn-toggle:focus {
   outline: 2px solid var(--fn-color-primary-500);
   outline-offset: 2px;
-}
-
-:where([data-mode='dark'], [data-mode='dark'] *) .fn-toggle {
-  background-color: var(--fn-color-surface-600);
 }
 
 /* --- Range Slider --- */
