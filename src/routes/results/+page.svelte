@@ -1,6 +1,7 @@
 <script lang="ts">
 	// Demo for ResultsLayout + ResultCard as a client site uses them: no base CSS, the parent
-	// site's CSS in a `captured` layer above the kit's, and an optional unlayered override. Not packaged.
+	// site's CSS (a Tailwind-style `*` reset, a call-to-action `button {}` rule) in a `captured` layer
+	// between the kit's look and frame layers, and an optional unlayered override. Not packaged.
 	import { ResultCard, ResultsLayout, formatDistance, type ResultsLayoutMode } from '$lib/index.js';
 
 	const sample = [
@@ -55,8 +56,11 @@
 <svelte:head>
 	<title>Results · findnearest-kit</title>
 	<!-- What a client template does: the kit lowest, the parent site's CSS over it -->
-	{@html `<style>@layer fn-kit, captured;
-		@layer captured { body { font-size: 18px; } h3 { font-family: Georgia, serif; color: purple; font-size: 1.25rem; font-weight: 700; margin: 0; } .site-link { color: #0b6e99; text-decoration: underline; } }
+	{@html `<style>@layer fn-kit-look, captured, fn-kit-frame;
+		@layer captured { body { font-size: 18px; } h3 { font-family: Georgia, serif; color: purple; font-size: 1.25rem; font-weight: 700; margin: 0; } .site-link { color: #0b6e99; text-decoration: underline; }
+			*, ::before, ::after { border-width: 0; border-style: none; } svg { display: block; }
+			button { display: inline-block; max-width: 100%; border: 2px solid navy; border-radius: 4px; padding: 22px 24px; font-weight: 700; font-size: 15px; letter-spacing: -0.5px; text-align: center; background-color: navy; color: white; overflow: hidden; }
+			button:hover, button:focus-visible { background-color: darkblue; } }
 	</style>`}
 	{#if override}
 		{@html `<style>.fn-result-card .fn-card-number { background: crimson; }</style>`}

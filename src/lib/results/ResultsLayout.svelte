@@ -9,12 +9,13 @@
   The map is a snippet: the app renders its own map component (this package never imports a map
   library) and drives it from `expandedIndex` and the `onhover` index.
 
-  On a client site the results must look like the parent site, so this styles the minimum: the
-  layouts, the card structure, the map markers' numbers and the closure tints. Typography, link
-  and heading looks come from the page. The styles sit in the `fn-kit` cascade layer, so the
-  parent site's CSS and the app's unlayered overrides both beat them without specificity fights.
-  Declare the order before any stylesheet loads, kit first:
-  `<style>@layer fn-kit, captured;</style>` in app.html.
+  On a client site the results must look like the parent site, so this styles the minimum and
+  sets no font, heading or link style. Two cascade layers: `fn-kit-look` (borders, radii,
+  shadows, colours, tints) sits under the parent site's CSS, which wins wherever it has a say;
+  `fn-kit-frame` (the layouts, positions, ellipsis and our own buttons' box) sits over it, so a
+  site's `*` reset or `button {}` style can't break the cards. The app's unlayered CSS beats
+  both. Declare the order before any stylesheet loads:
+  `<style>@layer fn-kit-look, captured, fn-kit-frame;</style>` in app.html.
 -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
@@ -112,7 +113,8 @@
 </div>
 
 <style>
-	@layer fn-kit {
+	/* How the cards look: under the parent site's CSS, which wins wherever it has a say */
+	@layer fn-kit-look {
 		/* Theme through --fnk-results-* on any ancestor. The fallbacks are the light look, with
 		   dark ones under [data-mode='dark']; an app that maps the properties onto its own
 		   tokens (fn-last.css does for fn.css apps) gets both modes from those. */
@@ -406,7 +408,7 @@
 			transition: background-color 0.15s ease;
 		}
 
-		.fn-results-layout :global(.fn-card-header:hover) {
+		.fn-results-layout :global(:is(.fn-card-header:hover, .fn-card-header:focus-visible)) {
 			background: var(--_hover);
 		}
 
@@ -553,6 +555,207 @@
 		}
 
 		@media (min-width: 1024px) {
+			.fn-map-column > :global(*) {
+				height: calc(100vh - 8rem);
+				max-height: var(--_max-height);
+			}
+		}
+	}
+	/* What must hold whatever the parent site's CSS says: the layouts, the sticky and floating
+	   positions, the ellipsis, and the box of our own controls. A card header is a <button>
+	   only for keyboard and screen readers, so a site's `button {}` call-to-action style must
+	   not land on it (BOQ's gives every button a 2px border, padding and inline-block). */
+	@layer fn-kit-frame {
+		.fn-results-layout {
+			display: grid;
+			grid-template-columns: 1fr;
+		}
+
+		.fn-results-column {
+			min-width: 0;
+			position: relative;
+		}
+
+		.fn-grid-backdrop {
+			display: block;
+			position: fixed;
+			inset: 0;
+			z-index: 50;
+			width: auto;
+			height: auto;
+			max-width: none;
+			margin: 0;
+			padding: 0;
+			border: none;
+			background: transparent;
+			box-shadow: none;
+			cursor: default;
+		}
+
+		.fn-cards-stack {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.fn-results-layout :global(.fn-result-card) {
+			position: sticky;
+			top: var(--_top, 0);
+			z-index: var(--_z, 1);
+			overflow: hidden;
+			margin-top: -8px;
+			background: var(--_bg);
+		}
+
+		.fn-results-layout :global(.fn-result-card:first-child) {
+			margin-top: 0;
+		}
+
+		.fn-results-layout :global(.fn-result-card[data-severity='error']) {
+			background: var(--_error-card);
+		}
+
+		.fn-results-layout :global(.fn-card-header) {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 1rem;
+			width: 100%;
+			max-width: none;
+			min-height: 56px;
+			margin: 0;
+			padding: 1rem 1.25rem;
+			border: none;
+			/* Corners follow the card, wherever it sits in the stack */
+			border-radius: inherit;
+			background: inherit;
+			font: inherit;
+			color: inherit;
+			letter-spacing: inherit;
+			text-transform: none;
+			text-align: left;
+			cursor: pointer;
+		}
+
+		.fn-results-layout :global(.fn-card-header:hover) {
+			background: var(--_hover);
+		}
+
+		.fn-results-layout :global(.fn-card-number) {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 26px;
+			height: 26px;
+			flex-shrink: 0;
+			border-radius: 50%;
+		}
+
+		.fn-results-layout :global(.fn-card-title) {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.fn-results-layout :global(:is(.fn-card-distance, .fn-status-badge)) {
+			flex-shrink: 0;
+		}
+
+		.fn-results-layout :global(.fn-status-badge) {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.25rem;
+		}
+
+		.fn-results-layout :global(.fn-result-icon) {
+			width: 1rem;
+			height: 1rem;
+			flex-shrink: 0;
+			fill: none;
+			stroke: currentColor;
+		}
+
+		.fn-results-layout :global(.fn-status-badge .fn-result-icon) {
+			width: 0.75rem;
+			height: 0.75rem;
+		}
+
+		.fn-results-layout :global(.fn-card-body) {
+			display: block;
+		}
+
+		.fn-results-layout :global(:is(.fn-hours-alerts-banner, .fn-card-content)) {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.fn-results-layout :global(.fn-alert-item) {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+
+		.fn-map-column {
+			position: sticky;
+			top: var(--_sticky-top);
+			height: fit-content;
+		}
+
+		.fn-map-column > :global(*) {
+			height: 400px;
+		}
+
+		@media (min-width: 1024px) {
+			.fn-results-layout.fn-with-map {
+				grid-template-columns: minmax(400px, 1fr) minmax(300px, 1fr);
+			}
+
+			.fn-results-layout.fn-layout-grid.fn-with-map .fn-cards-stack {
+				display: grid;
+				grid-template-rows: repeat(var(--_count, 10), 1fr);
+				grid-template-columns: minmax(0, 1fr);
+				height: min(calc(100vh - 8rem), var(--_max-height));
+				overflow: visible;
+			}
+
+			.fn-results-layout.fn-layout-grid :global(.fn-result-card) {
+				position: relative;
+				top: auto;
+				z-index: auto;
+				margin-top: 0;
+				display: flex;
+				flex-direction: column;
+				overflow: visible;
+			}
+
+			.fn-results-layout.fn-layout-grid :global(.fn-result-card .fn-card-header) {
+				flex: 1;
+				min-height: 0;
+			}
+
+			.fn-results-layout.fn-layout-grid :global(.fn-result-card.fn-is-expanded) {
+				z-index: 100;
+			}
+
+			.fn-results-layout.fn-layout-grid :global(.fn-result-card.fn-is-expanded .fn-card-body) {
+				position: absolute;
+				top: 100%;
+				left: -1px;
+				right: -1px;
+				max-height: 350px;
+				overflow-y: auto;
+				background: var(--_bg);
+			}
+
+			.fn-results-layout.fn-layout-grid :global(.fn-result-card.fn-is-dimmed) {
+				opacity: 0.4;
+			}
+
+			.fn-results-layout.fn-layout-grid :global(.fn-result-card.fn-is-dimmed:hover) {
+				opacity: 0.7;
+			}
+
 			.fn-map-column > :global(*) {
 				height: calc(100vh - 8rem);
 				max-height: var(--_max-height);

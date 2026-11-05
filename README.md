@@ -17,7 +17,7 @@ Shared FindNearest UI for Svelte 5 apps:
 Installed from GitHub at a tag (not published to npm):
 
 ```bash
-bun add github:findnearest/findnearest-kit#v0.3.0
+bun add github:findnearest/findnearest-kit#v0.3.1
 ```
 
 Requires `svelte` 5.20 or later. Upgrading means bumping the tag.
@@ -233,17 +233,20 @@ match the map's) and the closure tints. It sets no font, heading or link style: 
 the site's `h3`, and the header button inherits the page's type. To make the profile link look
 like the site's own links or buttons, pass the site's class as `profileClass`.
 
-**Cascade layer.** The styles sit in `@layer fn-kit`. Put it first, under the parent site's
-CSS, and leave the app's own overrides unlayered so they beat both:
+**Two cascade layers.** `fn-kit-look` (borders, radii, shadows, colours, tints) sits under the
+parent site's CSS, so the site wins wherever it has a say: a Tailwind `*` reset takes the card
+borders away, as it does on the site. `fn-kit-frame` (the layouts, the sticky and floating
+positions, the ellipsis, and the box of the kit's own buttons) sits over it, so the same reset or
+a site's call-to-action `button {}` rule can't break the cards. Leave the app's own overrides
+unlayered and they beat both:
 
 ```html
 <!-- app.html, before %sveltekit.head% -->
-<style>@layer fn-kit, captured;</style>
+<style>@layer fn-kit-look, captured, fn-kit-frame;</style>
 ```
 
 Layer order is fixed by the first stylesheet that names a layer, so declare it before anything
-loads. In an app that imports `fn.css` unlayered, its base element rules (`h3`, `a`) win the
-same way, which is usually what that app wants too.
+loads. An app with no captured layer can leave the order out: unlayered CSS beats both layers.
 
 ## Develop
 
