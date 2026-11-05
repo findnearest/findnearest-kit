@@ -71,3 +71,14 @@
   --fnk-ring: var(--fn-ring-primary);
   --fnk-shadow: var(--fn-shadow-md);
 }
+
+.fn-results-layout {
+  --fnk-results-bg: var(--fn-color-bg-elevated);
+  --fnk-results-border: var(--fn-color-border);
+  --fnk-results-border-raised: var(--fn-color-border-strong);
+  --fnk-results-hover: var(--fn-color-bg-muted);
+  --fnk-results-body-hover: var(--fn-color-bg-muted);
+  --fnk-results-muted: var(--fn-color-body-muted);
+  --fnk-results-link: var(--fn-color-link);
+  --fnk-results-radius: var(--fn-radius-lg);
+}
