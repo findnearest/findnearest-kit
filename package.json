@@ -1,9 +1,9 @@
 {
   "name": "findnearest-kit",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "Shared FindNearest UI for Svelte 5 apps: the base CSS (tokens, dark mode, fn-* classes) and components (geocoder search first).",
+  "description": "Shared FindNearest UI for Svelte 5 apps: the base CSS (tokens, dark mode, fn-* classes) and components (geocoder search, results cards and more).",
   "scripts": {
     "dev": "vite dev --port 7014 --strictPort",
     "package": "svelte-kit sync && svelte-package && publint",

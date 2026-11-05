@@ -17,7 +17,7 @@ Shared FindNearest UI for Svelte 5 apps:
 Installed from GitHub at a tag (not published to npm):
 
 ```bash
-bun add github:findnearest/findnearest-kit#v0.2.5
+bun add github:findnearest/findnearest-kit#v0.3.0
 ```
 
 Requires `svelte` 5.20 or later. Upgrading means bumping the tag.
@@ -167,6 +167,83 @@ Set any of these custom properties on an ancestor. The fallbacks are the flat Fi
 `--fnk-bg`, `--fnk-fg`, `--fnk-muted`, `--fnk-border`, `--fnk-divider`, `--fnk-hover`,
 `--fnk-accent`, `--fnk-accent-soft`, `--fnk-chip-bg`, `--fnk-error`, `--fnk-radius`,
 `--fnk-height`, `--fnk-font-size`, `--fnk-ring`, `--fnk-shadow`, `--fnk-z`.
+
+## Use ResultsLayout and ResultCard
+
+The results half of a public "find nearest" page: numbered location cards beside a map, so
+every client site shows results the same way and a client template only overrides details.
+
+```svelte
+<script lang="ts">
+	import { ResultsLayout, ResultCard, formatDistance } from 'findnearest-kit';
+
+	let expandedIndex = $state<number | null>(null);
+	let hoveredIndex = $state<number | null>(null);
+</script>
+
+<ResultsLayout
+	layout="grid"
+	count={locations.length}
+	withMap
+	bind:expandedIndex
+	onexpand={(i) => logView(locations[i])}
+	onhover={(i) => (hoveredIndex = i)}
+>
+	{#each locations as location, index (location.uid)}
+		<ResultCard
+			{index}
+			uid={location.uid}
+			number={firstNumber + index}
+			title={location.name}
+			distance={formatDistance(location.distance)}
+			severity={status.severity}
+			badge={status.badge}
+			alerts={status.alerts}
+			profileHref={profileUrl(location)}
+			profileLabel="service centre"
+		>
+			<p>{location.address}</p>
+		</ResultCard>
+	{/each}
+	{#snippet map()}
+		<MyMap highlighted={expandedIndex ?? hoveredIndex} />
+	{/snippet}
+	{#snippet footer()}
+		<MyPagination />
+	{/snippet}
+</ResultsLayout>
+```
+
+- **`layout`**: `grid` (from 1024px: equal rows filling the map's height; an open card's body
+  floats over the rows below, and Escape or a click outside closes it) or `wallet` (sticky
+  cards that stack as the page scrolls). Below 1024px both are one column, map last.
+- **The map is the app's**: pass it as the `map` snippet; it fills the map column. Drive its
+  highlight from `expandedIndex` and the `onhover` index, and set `expandedIndex` from a marker
+  click.
+- **The card knows no rules or URLs**: the app turns its hours data into `severity`, `badge`
+  and `alerts`, and passes `profileHref`. The open card's content is the children snippet.
+- **Theming**: `--fnk-results-*` custom properties (`-bg`, `-border`, `-hover`, `-muted`,
+  `-marker`, `-radius`, `-error`, `-error-text`, … listed at the top of the style in
+  `ResultsLayout.svelte`). The fallbacks cover light and dark (`data-mode="dark"`) without the
+  base CSS; `fn-last.css` maps the main ones onto the fn tokens.
+
+**On a client site the parent site's CSS wins.** The results must look like the page they sit
+in, so the kit styles the minimum: the layouts, the card structure, the marker numbers (they
+match the map's) and the closure tints. It sets no font, heading or link style: card titles are
+the site's `h3`, and the header button inherits the page's type. To make the profile link look
+like the site's own links or buttons, pass the site's class as `profileClass`.
+
+**Cascade layer.** The styles sit in `@layer fn-kit`. Put it first, under the parent site's
+CSS, and leave the app's own overrides unlayered so they beat both:
+
+```html
+<!-- app.html, before %sveltekit.head% -->
+<style>@layer fn-kit, captured;</style>
+```
+
+Layer order is fixed by the first stylesheet that names a layer, so declare it before anything
+loads. In an app that imports `fn.css` unlayered, its base element rules (`h3`, `a`) win the
+same way, which is usually what that app wants too.
 
 ## Develop
 

@@ -4,3 +4,6 @@ export { geocoderSearch, GeocoderError, MIN_QUERY_LENGTH, messageForStatus, kind
 export { default as AccountBlock } from './account/AccountBlock.svelte';
 export { default as AccountMenu } from './account/AccountMenu.svelte';
 export { themeState } from './theme/theme.svelte.js';
+export { default as ResultsLayout } from './results/ResultsLayout.svelte';
+export { default as ResultCard } from './results/ResultCard.svelte';
+export { formatDistance } from './results/results.js';
