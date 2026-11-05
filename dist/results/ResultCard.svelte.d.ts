@@ -17,6 +17,9 @@ interface Props {
     profileHref?: string;
     /** What a profile is called, as in "View {profileLabel} ›". */
     profileLabel?: string;
+    /** Class(es) for the profile link, so it can wear the parent site's own link or button
+     *  style (the kit gives it none). */
+    profileClass?: string;
     onprofileclick?: (e: MouseEvent) => void;
     /** Set as `data-location-uid`, so the app can find the card again. */
     uid?: string;

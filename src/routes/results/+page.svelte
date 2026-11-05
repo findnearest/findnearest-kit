@@ -1,6 +1,6 @@
 <script lang="ts">
-	// Demo for ResultsLayout + ResultCard as a client site uses them: no base CSS, the host page's
-	// own CSS in a lower `captured` layer, and an optional unlayered override. Not packaged.
+	// Demo for ResultsLayout + ResultCard as a client site uses them: no base CSS, the parent
+	// site's CSS in a `captured` layer above the kit's, and an optional unlayered override. Not packaged.
 	import { ResultCard, ResultsLayout, formatDistance, type ResultsLayoutMode } from '$lib/index.js';
 
 	const sample = [
@@ -54,9 +54,9 @@
 
 <svelte:head>
 	<title>Results · findnearest-kit</title>
-	<!-- What a client template does: host CSS layered low, the kit above it -->
-	{@html `<style>@layer captured, fn-kit;
-		@layer captured { h3 { font-family: Georgia, serif; color: purple; font-size: 2rem; } button { background: gold; } }
+	<!-- What a client template does: the kit lowest, the parent site's CSS over it -->
+	{@html `<style>@layer fn-kit, captured;
+		@layer captured { body { font-size: 18px; } h3 { font-family: Georgia, serif; color: purple; font-size: 1.25rem; font-weight: 700; margin: 0; } .site-link { color: #0b6e99; text-decoration: underline; } }
 	</style>`}
 	{#if override}
 		{@html `<style>.fn-result-card .fn-card-number { background: crimson; }</style>`}
@@ -94,6 +94,7 @@
 				alerts={[...s.alerts]}
 				profileHref="#profile-{s.uid}"
 				profileLabel="service centre"
+				profileClass="site-link"
 				onprofileclick={() => events.push(`profile ${s.uid}`)}
 			>
 				<p>12 Smith Street, Kempsey, NSW, 2440</p>

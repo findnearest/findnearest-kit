@@ -223,24 +223,27 @@ every client site shows results the same way and a client template only override
 - **The card knows no rules or URLs**: the app turns its hours data into `severity`, `badge`
   and `alerts`, and passes `profileHref`. The open card's content is the children snippet.
 - **Theming**: `--fnk-results-*` custom properties (`-bg`, `-border`, `-hover`, `-muted`,
-  `-link`, `-marker`, `-radius`, `-error`, `-error-text`, … listed at the top of the style in
+  `-marker`, `-radius`, `-error`, `-error-text`, … listed at the top of the style in
   `ResultsLayout.svelte`). The fallbacks cover light and dark (`data-mode="dark"`) without the
   base CSS; `fn-last.css` maps the main ones onto the fn tokens.
 
-**Cascade layer.** The styles sit in `@layer fn-kit`, so any unlayered app CSS (a client
-template's custom CSS) overrides them without specificity fights. Layer order is set by the
-first stylesheet that names a layer, so declare it before anything else loads, with the layers
-that must lose to the kit first:
+**On a client site the parent site's CSS wins.** The results must look like the page they sit
+in, so the kit styles the minimum: the layouts, the card structure, the marker numbers (they
+match the map's) and the closure tints. It sets no font, heading or link style: card titles are
+the site's `h3`, and the header button inherits the page's type. To make the profile link look
+like the site's own links or buttons, pass the site's class as `profileClass`.
+
+**Cascade layer.** The styles sit in `@layer fn-kit`. Put it first, under the parent site's
+CSS, and leave the app's own overrides unlayered so they beat both:
 
 ```html
 <!-- app.html, before %sveltekit.head% -->
-<style>@layer captured, fn-kit;</style>
+<style>@layer fn-kit, captured;</style>
 ```
 
-Without that, a layer named earlier than `fn-kit` (a captured client stylesheet, say) can end
-up above it and restyle the cards. In an app that imports `fn.css` unlayered, its base element
-rules (`h3`, `a`) beat the layered card styles; import it into a layer below the kit instead:
-`@import 'findnearest-kit/fn.css' layer(fn-base);` with `@layer fn-base, fn-kit;`.
+Layer order is fixed by the first stylesheet that names a layer, so declare it before anything
+loads. In an app that imports `fn.css` unlayered, its base element rules (`h3`, `a`) win the
+same way, which is usually what that app wants too.
 
 ## Develop
 

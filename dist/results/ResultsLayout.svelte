@@ -9,9 +9,12 @@
   The map is a snippet: the app renders its own map component (this package never imports a map
   library) and drives it from `expandedIndex` and the `onhover` index.
 
-  Styles sit in the `fn-kit` cascade layer, so an app's unlayered CSS overrides them without
-  specificity fights. Declare the layer order before any stylesheet loads, with any layer that
-  must lose to the kit first, e.g. `<style>@layer captured, fn-kit;</style>` in app.html.
+  On a client site the results must look like the parent site, so this styles the minimum: the
+  layouts, the card structure, the map markers' numbers and the closure tints. Typography, link
+  and heading looks come from the page. The styles sit in the `fn-kit` cascade layer, so the
+  parent site's CSS and the app's unlayered overrides both beat them without specificity fights.
+  Declare the order before any stylesheet loads, kit first:
+  `<style>@layer fn-kit, captured;</style>` in app.html.
 -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
@@ -121,7 +124,6 @@
 			--_hover: var(--fnk-results-hover, rgb(243 244 246));
 			--_body-hover: var(--fnk-results-body-hover, rgb(249 250 251));
 			--_muted: var(--fnk-results-muted, rgb(107 114 128));
-			--_link: var(--fnk-results-link, #2563eb);
 			--_marker: var(--fnk-results-marker, rgb(55 65 81));
 			--_marker-open: var(--fnk-results-marker-open, rgb(31 41 55));
 			--_marker-fg: var(--fnk-results-marker-fg, #fff);
@@ -391,6 +393,10 @@
 			align-items: center;
 			gap: 1rem;
 			padding: 1rem 1.25rem;
+			/* A button doesn't inherit the page's type by default; the parent site's should show */
+			font: inherit;
+			color: inherit;
+			letter-spacing: inherit;
 			background: inherit;
 			border: none;
 			width: 100%;
@@ -425,10 +431,8 @@
 			transform: scale(1.1);
 		}
 
+		/* Size, weight and font are the parent site's heading style; only the ellipsis is ours */
 		.fn-results-layout :global(.fn-card-title) {
-			font-weight: 600;
-			font-size: 1.125rem;
-			line-height: 1.4;
 			flex: 1;
 			min-width: 0;
 			overflow: hidden;
@@ -437,9 +441,6 @@
 		}
 
 		.fn-results-layout :global(.fn-card-distance) {
-			font-size: 0.875rem;
-			font-weight: 500;
-			color: var(--_muted);
 			flex-shrink: 0;
 		}
 
@@ -498,12 +499,6 @@
 			gap: 0.5rem;
 			padding: 0.5rem 0.75rem;
 			border-radius: 0.375rem;
-			font-size: 0.875rem;
-			line-height: 1.4;
-		}
-
-		.fn-results-layout :global(.fn-alert-item strong) {
-			font-weight: 600;
 		}
 
 		.fn-results-layout :global(.fn-card-content) {
@@ -518,16 +513,6 @@
 			padding-top: 0.75rem;
 			border-top: 1px solid var(--_border);
 			text-align: right;
-		}
-
-		.fn-results-layout :global(.fn-view-profile-link a) {
-			font-size: 0.875rem;
-			color: var(--_link);
-			text-decoration: none;
-		}
-
-		.fn-results-layout :global(.fn-view-profile-link a:hover) {
-			text-decoration: underline;
 		}
 
 		/* ---------------------------------------------------------------- severity tints */

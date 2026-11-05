@@ -79,6 +79,5 @@
   --fnk-results-hover: var(--fn-color-bg-muted);
   --fnk-results-body-hover: var(--fn-color-bg-muted);
   --fnk-results-muted: var(--fn-color-body-muted);
-  --fnk-results-link: var(--fn-color-link);
   --fnk-results-radius: var(--fn-radius-lg);
 }
