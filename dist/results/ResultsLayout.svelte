@@ -542,23 +542,9 @@
 		}
 
 		/* ---------------------------------------------------------------- map */
-		.fn-map-column {
-			position: sticky;
-			top: var(--_sticky-top);
-			height: fit-content;
-		}
-
 		.fn-map-column > :global(*) {
-			height: 400px;
 			border-radius: var(--_radius);
 			box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-		}
-
-		@media (min-width: 1024px) {
-			.fn-map-column > :global(*) {
-				height: calc(100vh - 8rem);
-				max-height: var(--_max-height);
-			}
 		}
 	}
 	/* What must hold whatever the parent site's CSS says: the layouts, the sticky and floating
@@ -696,14 +682,16 @@
 			gap: 0.5rem;
 		}
 
+		/* The column has the height and the map fills it: a map component's own unlayered
+		   `height: 100%` beats any layered height on the map itself. */
 		.fn-map-column {
 			position: sticky;
 			top: var(--_sticky-top);
-			height: fit-content;
+			height: 400px;
 		}
 
 		.fn-map-column > :global(*) {
-			height: 400px;
+			height: 100%;
 		}
 
 		@media (min-width: 1024px) {
@@ -756,7 +744,7 @@
 				opacity: 0.7;
 			}
 
-			.fn-map-column > :global(*) {
+			.fn-map-column {
 				height: calc(100vh - 8rem);
 				max-height: var(--_max-height);
 			}
