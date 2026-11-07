@@ -135,6 +135,7 @@
 			--_sticky-top: var(--fnk-results-sticky-top, 56px);
 			--_wallet-step: var(--fnk-results-wallet-step, 47px);
 			--_max-height: var(--fnk-results-max-height, 600px);
+			--_title-size: var(--fnk-results-title-size, 1.125rem);
 			--_error: var(--fnk-results-error, rgb(239 68 68));
 			--_error-text: var(--fnk-results-error-text, rgb(185 28 28));
 			--_error-strong: var(--fnk-results-error-strong, rgb(127 29 29));
@@ -433,7 +434,7 @@
 			transform: scale(1.1);
 		}
 
-		/* Size, weight and font are the parent site's heading style; only the ellipsis is ours */
+		/* Font and weight are the parent site's heading style; the size is set in the frame layer */
 		.fn-results-layout :global(.fn-card-title) {
 			flex: 1;
 			min-width: 0;
@@ -642,6 +643,11 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			/* A card title is a list item, not a section heading: a parent site's h3 size can
+			   swamp the card. Font and weight stay the parent's. */
+			margin: 0;
+			font-size: var(--_title-size);
+			line-height: 1.3;
 		}
 
 		.fn-results-layout :global(:is(.fn-card-distance, .fn-status-badge)) {
