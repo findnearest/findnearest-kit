@@ -2930,3 +2930,69 @@ input.fn-toggle:focus {
   background-color: oklch(from var(--fn-color-surface-500) l c h / 0.08);
 }
 
+
+/* --- Map popups (MapLibre) ---
+   Skins MapLibre's own popup classes so every app's map popups match: a themed surface and tip,
+   and a close button with its own space instead of sitting on the title.
+   Two-class selectors win over maplibre-gl.css whichever of the two loads first. */
+
+.maplibregl-popup .maplibregl-popup-content {
+  padding: 0.75rem 0.875rem;
+  background: var(--fn-color-bg-elevated);
+  color: var(--fn-color-body);
+  border-radius: var(--fn-radius-md);
+  box-shadow: var(--fn-shadow-md);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.maplibregl-popup .maplibregl-popup-content:has(> .maplibregl-popup-close-button) {
+  padding-right: 2.25rem;
+}
+
+.maplibregl-popup .maplibregl-popup-close-button {
+  top: 0.5rem;
+  right: 0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--fn-color-body-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--fn-radius-sm);
+  cursor: pointer;
+}
+
+.maplibregl-popup .maplibregl-popup-close-button:hover {
+  color: var(--fn-color-body);
+  background: var(--fn-color-bg-muted);
+}
+
+.maplibregl-popup .maplibregl-popup-close-button:focus-visible {
+  outline: none;
+  box-shadow: var(--fn-ring-primary);
+}
+
+.maplibregl-popup-anchor-top.maplibregl-popup .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left.maplibregl-popup .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right.maplibregl-popup .maplibregl-popup-tip {
+  border-bottom-color: var(--fn-color-bg-elevated);
+}
+
+.maplibregl-popup-anchor-bottom.maplibregl-popup .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left.maplibregl-popup .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right.maplibregl-popup .maplibregl-popup-tip {
+  border-top-color: var(--fn-color-bg-elevated);
+}
+
+.maplibregl-popup-anchor-left.maplibregl-popup .maplibregl-popup-tip {
+  border-right-color: var(--fn-color-bg-elevated);
+}
+
+.maplibregl-popup-anchor-right.maplibregl-popup .maplibregl-popup-tip {
+  border-left-color: var(--fn-color-bg-elevated);
+}
