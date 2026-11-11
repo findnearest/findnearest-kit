@@ -307,8 +307,8 @@
 				onmousemove={() => (active = i)}
 				onclick={() => pick(r)}
 			>
+				<span class="fnk-text" title={r.display_text}>{r.display_text}</span>
 				<span class="fnk-kind fnk-kind-{kindOf(r)}">{kindLabel(r)}</span>
-				<span class="fnk-text">{r.display_text}</span>
 			</li>
 		{/each}
 	</ul>
@@ -513,7 +513,7 @@
 	}
 
 	.fnk-kind {
-		/* Wide enough for the longest geocoder label (NEIGHBOURHOOD) so the names stay in one column */
+		/* Wide enough for the longest geocoder label (NEIGHBOURHOOD), so every chip is the same width */
 		flex: 0 0 6.5rem;
 		padding: 1px 0;
 		font-size: 0.625rem;
@@ -530,9 +530,14 @@
 		color: var(--_accent);
 		background: var(--_accent-soft);
 	}
+	/* The name leads and takes the row; a long one ends in an ellipsis (its start is the part
+	   that matched what was typed) so the chip on the right stays whole and the same width. */
 	.fnk-text {
+		flex: 1 1 auto;
 		min-width: 0;
-		overflow-wrap: anywhere;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.fnk-status {
