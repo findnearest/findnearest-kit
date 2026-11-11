@@ -348,6 +348,27 @@
 		color: var(--_fg);
 	}
 
+	/* On a client site the box sits inside the parent site's markup and CSS. These rules are
+	   unlayered, so they already beat a site's layered CSS wherever they set something; what
+	   leaks is anything left unset, inherited from a centred or uppercase section or set by a
+	   site's bare `li {}` / `input {}` rules. Pin those text properties here. Font family
+	   still comes from the page, so the box reads in the site's typeface. */
+	.fnk-geocoder,
+	input,
+	.fnk-results,
+	li,
+	.fnk-text,
+	.fnk-status {
+		text-align: start;
+		text-transform: none;
+		text-indent: 0;
+		letter-spacing: normal;
+		word-spacing: normal;
+		white-space: normal;
+		font-style: normal;
+		font-weight: normal;
+	}
+
 	.fnk-field {
 		position: relative;
 		display: flex;
@@ -470,9 +491,19 @@
 		display: flex;
 		align-items: baseline;
 		gap: 0.6rem;
+		margin: 0;
 		padding: 0.45rem 0.75rem;
+		list-style: none;
+		color: var(--_fg);
+		background: none;
+		border: 0;
 		cursor: pointer;
 		line-height: 1.3;
+	}
+	/* A site's list markers (`li::before { content: '•' }`) */
+	li::before,
+	li::after {
+		content: none;
 	}
 	li.fnk-active {
 		background: var(--_hover);
