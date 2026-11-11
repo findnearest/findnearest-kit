@@ -11,6 +11,8 @@ export interface GeocoderResult {
     source: GeocoderSource;
     source_id?: string;
     display_text: string;
+    /** What the geocoder says this is (Suburb, Settlement, Station, Street…), shown on the chip */
+    kind_label?: string;
     street_number?: string | null;
     street_name?: string | null;
     suburb?: string | null;

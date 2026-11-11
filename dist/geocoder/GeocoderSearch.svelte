@@ -47,7 +47,7 @@
 		layout?: 'dropdown' | 'inline';
 		/** Empty the box after a pick instead of showing the picked text */
 		clearOnSelect?: boolean;
-		/** Chip text for a result; defaults to its kind (town, address, place, point, location) */
+		/** Chip text for a result; defaults to the geocoder's kind_label, else its kind (town, address, place, point, location) */
 		kindLabel?: (result: GeocoderResult) => string;
 		disabled?: boolean;
 	}
@@ -67,7 +67,7 @@
 		slowAfterMs = 2_000,
 		layout = 'dropdown',
 		clearOnSelect = false,
-		kindLabel = (r: GeocoderResult) => kindOf(r),
+		kindLabel = (r: GeocoderResult) => r.kind_label ?? kindOf(r),
 		disabled = false
 	}: Props = $props();
 
@@ -513,7 +513,8 @@
 	}
 
 	.fnk-kind {
-		flex: 0 0 4.75rem;
+		/* Wide enough for the longest geocoder label (NEIGHBOURHOOD) so the names stay in one column */
+		flex: 0 0 6.5rem;
 		padding: 1px 0;
 		font-size: 0.625rem;
 		font-weight: 600;
