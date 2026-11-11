@@ -407,9 +407,15 @@
 		opacity: 0.6;
 	}
 
+	/* The icon, spinner and clear button are pinned to the vertical centre with top/bottom/auto
+	   margins, not left to their static position: a site's `button {}` margin or offset (one adds
+	   margin-top: 32px) would otherwise push the clear button off centre. */
 	.fnk-icon {
 		position: absolute;
 		left: 0.6rem;
+		top: 0;
+		bottom: 0;
+		margin: auto 0;
 		width: 14px;
 		height: 14px;
 		fill: none;
@@ -422,6 +428,9 @@
 	.fnk-spinner {
 		position: absolute;
 		right: 0.6rem;
+		top: 0;
+		bottom: 0;
+		margin: auto 0;
 		width: 14px;
 		height: 14px;
 		border: 2px solid var(--_divider);
@@ -443,11 +452,19 @@
 	.fnk-clear {
 		position: absolute;
 		right: 0.3rem;
+		top: 0;
+		bottom: 0;
+		margin: auto 0;
 		display: grid;
 		place-items: center;
 		width: 24px;
 		height: 24px;
+		min-width: 0;
+		min-height: 0;
 		padding: 0;
+		line-height: 1;
+		box-shadow: none;
+		transform: none;
 		background: none;
 		border: 0;
 		border-radius: var(--_radius);
