@@ -34,5 +34,6 @@ export {
 	clearGroup,
 	type FilterGroup,
 	type FilterOption,
-	type FilterStyle
+	type FilterStyle,
+	type DescriptionDisplay
 } from './filters/filters.js';

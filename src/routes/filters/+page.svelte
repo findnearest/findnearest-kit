@@ -57,11 +57,26 @@
 		}
 	];
 
+	const tips: FilterGroup[] = [
+		{
+			...offices[0],
+			uid: 'tips',
+			descriptionDisplay: 'tooltip',
+			showAll: false,
+			options: [
+				{ uid: 'centre', label: 'service centres', description: null, isDefault: false },
+				{ uid: 'specialist', label: 'service centres with a specialist officer', description: 'Staff at these centres can help with one specialist area of payments and services.', isDefault: false },
+				{ uid: 'agent', label: 'agents', description: null, isDefault: false }
+			]
+		}
+	];
+
 	const menu: FilterGroup[] = [{ ...types[0], uid: 'menu', label: 'Filter', style: 'menu' }];
 
 	let rangeSel = $state(defaultSelection(range));
 	let typeSel = $state<string[]>([]);
 	let officeSel = $state<string[]>([]);
+	let tipSel = $state<string[]>([]);
 	let menuSel = $state<string[]>([]);
 </script>
 
@@ -92,6 +107,12 @@
 		<h2>Choice with descriptions and an "All" choice</h2>
 		<CategoryFilter groups={offices} bind:selected={officeSel} />
 		<p class="sel">Selected: {officeSel.join(', ') || 'none (all)'}</p>
+	</section>
+
+	<section class="site-section">
+		<h2>Choice with tooltips and no "All" choice</h2>
+		<CategoryFilter groups={tips} bind:selected={tipSel} />
+		<p class="sel">Selected: {tipSel.join(', ') || 'none (all)'}</p>
 	</section>
 
 	<section class="site-section">
