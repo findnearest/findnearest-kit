@@ -7,3 +7,5 @@ export { themeState } from './theme/theme.svelte.js';
 export { default as ResultsLayout } from './results/ResultsLayout.svelte';
 export { default as ResultCard } from './results/ResultCard.svelte';
 export { formatDistance } from './results/results.js';
+export { default as CategoryFilter } from './filters/CategoryFilter.svelte';
+export { defaultSelection, toggleOption, clearGroup } from './filters/filters.js';
