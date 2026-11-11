@@ -7,7 +7,7 @@
   multi, with each option's description), `toggle` (a switch per option, e.g. "Only show
   dealers with in-store display") and `menu` (a button that opens a checklist, for long lists).
   A single-selection `choice` group with no default option gets an "All" choice first, so it
-  can be cleared, unless the group sets `showAll: false`. Option descriptions show under the
+  can be cleared, unless the group sets `showAllChoice: false`. Option descriptions show under the
   option, behind an info button with a tooltip (hover, keyboard focus or tap; Esc closes), or not
   at all, by the group's `descriptionDisplay`.
 
@@ -59,7 +59,7 @@
 	const isOn = (optionUid: string) => selected.includes(optionUid);
 	const chosenIn = (g: FilterGroup) => g.options.filter((o) => isOn(o.uid)).length;
 	const needsAll = (g: FilterGroup) =>
-		g.selection === 'single' && (g.showAll ?? true) && !g.options.some((o) => o.isDefault);
+		g.selection === 'single' && (g.showAllChoice ?? true) && !g.options.some((o) => o.isDefault);
 	const shows = (g: FilterGroup, where: 'below' | 'tooltip', o: FilterOption) =>
 		!!o.description && (g.descriptionDisplay ?? 'below') === where;
 

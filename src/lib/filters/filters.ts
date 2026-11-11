@@ -22,7 +22,7 @@ export interface FilterGroup {
 	/** How option descriptions show: under the option (default), behind an info icon, or not at all */
 	descriptionDisplay?: DescriptionDisplay;
 	/** A one-pick group without a default option gets an "All" choice first (default true) */
-	showAll?: boolean;
+	showAllChoice?: boolean;
 	options: FilterOption[];
 }
 

@@ -62,7 +62,7 @@
 			...offices[0],
 			uid: 'tips',
 			descriptionDisplay: 'tooltip',
-			showAll: false,
+			showAllChoice: false,
 			options: [
 				{ uid: 'centre', label: 'service centres', description: null, isDefault: false },
 				{ uid: 'specialist', label: 'service centres with a specialist officer', description: 'Staff at these centres can help with one specialist area of payments and services.', isDefault: false },
