@@ -27,3 +27,12 @@ export {
 	type ResultSeverity,
 	type ResultsLayoutMode
 } from './results/results.js';
+export { default as CategoryFilter } from './filters/CategoryFilter.svelte';
+export {
+	defaultSelection,
+	toggleOption,
+	clearGroup,
+	type FilterGroup,
+	type FilterOption,
+	type FilterStyle
+} from './filters/filters.js';
