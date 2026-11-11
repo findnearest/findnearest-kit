@@ -43,7 +43,7 @@ interface Props {
     layout?: 'dropdown' | 'inline';
     /** Empty the box after a pick instead of showing the picked text */
     clearOnSelect?: boolean;
-    /** Chip text for a result; defaults to its kind (town, address, place, point, location) */
+    /** Chip text for a result; defaults to the geocoder's kind_label, else its kind (town, address, place, point, location) */
     kindLabel?: (result: GeocoderResult) => string;
     disabled?: boolean;
 }
