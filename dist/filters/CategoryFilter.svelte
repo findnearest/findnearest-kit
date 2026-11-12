@@ -154,7 +154,7 @@
 		{:else if g.style === 'menu'}
 			<details class="fnk-filter-group fnk-menu">
 				<summary class="fnk-menu-button {chipClass}">
-					{g.label}{chosenIn(g) > 0 ? ` (${chosenIn(g)})` : ''}
+					{g.label}{g.selection !== 'single' && chosenIn(g) > 0 ? ` (${chosenIn(g)})` : ''}
 				</summary>
 				<fieldset class="fnk-menu-panel fnk-choices">
 					<legend class="fnk-visually-hidden">{g.label}</legend>
