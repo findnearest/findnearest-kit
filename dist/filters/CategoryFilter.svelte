@@ -359,7 +359,8 @@
 		.fnk-switch {
 			position: relative;
 			display: inline-flex;
-			align-items: center;
+			align-items: flex-start;
+			min-width: 0;
 			gap: 0.6rem;
 			cursor: pointer;
 		}
@@ -420,7 +421,7 @@
 
 		.fnk-switch-item {
 			display: flex;
-			align-items: center;
+			align-items: flex-start;
 			gap: 0.4rem;
 		}
 
