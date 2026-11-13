@@ -13,7 +13,9 @@
 	 * empty result is said out loud, Enter never submits a surrounding form, and focusing a
 	 * pre-filled box searches what is in it.
 	 */
+	import { formatDistance } from '../results/results.js';
 	import {
+		distanceMeters,
 		GeocoderError,
 		isSpot,
 		kindOf,
@@ -32,6 +34,8 @@
 		value?: string;
 		/** Point to rank results near, read at search time (e.g. the map centre) */
 		bias?: () => { lat: number; lon: number } | null | undefined;
+		/** Show each result's distance from this point, read at search time (e.g. the pin being edited) */
+		distanceFrom?: () => { lat: number; lon: number } | null | undefined;
 		placeholder?: string;
 		/** Accessible name when no visible <label for> points at `id` */
 		label?: string;
@@ -57,6 +61,7 @@
 		onSelect,
 		value = $bindable(''),
 		bias,
+		distanceFrom,
 		placeholder = 'Search for a town, suburb or address…',
 		label,
 		id,
@@ -78,6 +83,8 @@
 	type Status = 'idle' | 'searching' | 'slow' | 'empty' | 'error';
 
 	let results = $state<GeocoderResult[]>([]);
+	/** distanceFrom's point when the current results arrived */
+	let origin = $state<{ lat: number; lon: number } | null>(null);
 	let status = $state<Status>('idle');
 	let errorMessage = $state('');
 	let open = $state(false);
@@ -152,6 +159,7 @@
 		try {
 			const hits = await search(q, { limit, bias: bias?.() ?? null, signal: ctl.signal });
 			if (mine !== seq) return;
+			origin = distanceFrom?.() ?? null;
 			results = hits;
 			active = hits.length ? 0 : -1;
 			status = hits.length ? 'idle' : 'empty';
@@ -308,6 +316,9 @@
 				onclick={() => pick(r)}
 			>
 				<span class="fnk-text" title={r.display_text}>{r.display_text}</span>
+				{#if origin}
+					<span class="fnk-dist">{formatDistance(distanceMeters(origin, r.coordinates))}</span>
+				{/if}
 				<span class="fnk-kind fnk-kind-{kindOf(r)}">{kindLabel(r)}</span>
 			</li>
 		{/each}
@@ -555,6 +566,16 @@
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	/* Right-aligned beside the chip so "<100m" and "1838km" line up down the list */
+	.fnk-dist {
+		flex: 0 0 auto;
+		min-width: 3.5rem;
+		font-size: 0.75rem;
+		font-variant-numeric: tabular-nums;
+		text-align: end;
+		color: var(--_muted);
 	}
 
 	.fnk-status {

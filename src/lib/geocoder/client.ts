@@ -14,6 +14,7 @@ export type GeocoderSource =
 	| 'nominatim'
 	| 'suburb'
 	| 'osm_poi'
+	| 'placename'
 	| 'coordinate'
 	| (string & {});
 
@@ -118,6 +119,18 @@ function normalise(r: GeocoderResult): GeocoderResult {
 	return { ...r, coordinates: { lat: Number(r.coordinates.lat), lon: Number(r.coordinates.lon) } };
 }
 
+/** Straight-line distance in metres between two points (haversine). */
+export function distanceMeters(
+	a: { lat: number; lon: number },
+	b: { lat: number; lon: number }
+): number {
+	const rad = Math.PI / 180;
+	const h =
+		Math.sin(((b.lat - a.lat) * rad) / 2) ** 2 +
+		Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(((b.lon - a.lon) * rad) / 2) ** 2;
+	return 2 * 6_371_000 * Math.asin(Math.sqrt(h));
+}
+
 /** What a result is, in the words shown on its chip. */
 export type ResultKind = 'town' | 'address' | 'place' | 'point' | 'location';
 
@@ -126,6 +139,7 @@ export function kindOf(r: Pick<GeocoderResult, 'source'>): ResultKind {
 		case 'suburb':
 			return 'town';
 		case 'osm_poi':
+		case 'placename':
 		case 'nominatim':
 			return 'place';
 		case 'coordinate':

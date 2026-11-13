@@ -1,5 +1,12 @@
 import { describe, expect, test } from 'bun:test';
-import { geocoderSearch, GeocoderError, isSpot, kindOf, zoomFor } from '../src/lib/geocoder/client.js';
+import {
+	distanceMeters,
+	geocoderSearch,
+	GeocoderError,
+	isSpot,
+	kindOf,
+	zoomFor
+} from '../src/lib/geocoder/client.js';
 
 function fakeFetch(status: number, body: unknown, seen: string[] = []) {
 	return (async (url: string) => {
@@ -85,6 +92,7 @@ describe('kinds', () => {
 	test('labels, pins and zooms', () => {
 		expect(kindOf({ source: 'suburb' })).toBe('town');
 		expect(kindOf({ source: 'osm_poi' })).toBe('place');
+		expect(kindOf({ source: 'placename' })).toBe('place');
 		expect(kindOf({ source: 'coordinate' })).toBe('point');
 		expect(kindOf({ source: 'location' })).toBe('location');
 		expect(kindOf({ source: 'gnaf' })).toBe('address');
@@ -93,5 +101,18 @@ describe('kinds', () => {
 		expect(zoomFor({ source: 'suburb' })).toBe(14);
 		expect(zoomFor({ source: 'osm_poi' })).toBe(16);
 		expect(zoomFor({ source: 'gnaf' })).toBe(17);
+	});
+});
+
+describe('distanceMeters', () => {
+	test('Sydney to Melbourne is about 713 km', () => {
+		const m = distanceMeters({ lat: -33.8688, lon: 151.2093 }, { lat: -37.8136, lon: 144.9631 });
+		expect(m / 1000).toBeGreaterThan(710);
+		expect(m / 1000).toBeLessThan(716);
+	});
+	test('a homestead 140 m from its pin', () => {
+		const m = distanceMeters({ lat: -21.04287, lon: 134.675746 }, { lat: -21.0433, lon: 134.6769 });
+		expect(m).toBeGreaterThan(100);
+		expect(m).toBeLessThan(150);
 	});
 });

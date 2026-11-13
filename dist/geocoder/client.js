@@ -62,11 +62,19 @@ export function messageForStatus(status) {
 function normalise(r) {
     return { ...r, coordinates: { lat: Number(r.coordinates.lat), lon: Number(r.coordinates.lon) } };
 }
+/** Straight-line distance in metres between two points (haversine). */
+export function distanceMeters(a, b) {
+    const rad = Math.PI / 180;
+    const h = Math.sin(((b.lat - a.lat) * rad) / 2) ** 2 +
+        Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(((b.lon - a.lon) * rad) / 2) ** 2;
+    return 2 * 6_371_000 * Math.asin(Math.sqrt(h));
+}
 export function kindOf(r) {
     switch (r.source) {
         case 'suburb':
             return 'town';
         case 'osm_poi':
+        case 'placename':
         case 'nominatim':
             return 'place';
         case 'coordinate':
