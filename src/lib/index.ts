@@ -8,6 +8,7 @@ export {
 	kindOf,
 	isSpot,
 	zoomFor,
+	distanceMeters,
 	type GeocoderResult,
 	type GeocoderSource,
 	type GeocoderSearchConfig,

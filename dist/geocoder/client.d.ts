@@ -6,7 +6,7 @@
  * to add its own lookups (ANTS answers H3 cell indexes itself before falling through to this).
  */
 /** Where a result came from, as the geocoder reports it. Apps may add their own (e.g. 'h3'). */
-export type GeocoderSource = 'gnaf' | 'linz' | 'location' | 'nominatim' | 'suburb' | 'osm_poi' | 'coordinate' | (string & {});
+export type GeocoderSource = 'gnaf' | 'linz' | 'location' | 'nominatim' | 'suburb' | 'osm_poi' | 'placename' | 'coordinate' | (string & {});
 export interface GeocoderResult {
     source: GeocoderSource;
     source_id?: string;
@@ -62,6 +62,14 @@ export declare const MIN_QUERY_LENGTH = 3;
 /** A SearchFn for the FindNearest geocoder's /search contract. */
 export declare function geocoderSearch(config: GeocoderSearchConfig): SearchFn;
 export declare function messageForStatus(status: number): string;
+/** Straight-line distance in metres between two points (haversine). */
+export declare function distanceMeters(a: {
+    lat: number;
+    lon: number;
+}, b: {
+    lat: number;
+    lon: number;
+}): number;
 /** What a result is, in the words shown on its chip. */
 export type ResultKind = 'town' | 'address' | 'place' | 'point' | 'location';
 export declare function kindOf(r: Pick<GeocoderResult, 'source'>): ResultKind;

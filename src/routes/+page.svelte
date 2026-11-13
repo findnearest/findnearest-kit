@@ -62,6 +62,7 @@
 				<GeocoderSearch
 					{search}
 					bias={() => ({ lat: -33.8688, lon: 151.2093 })}
+					distanceFrom={() => ({ lat: -33.8688, lon: 151.2093 })}
 					clearOnSelect
 					onSelect={(result, info) => (picked = { result, ...info })}
 				/>
