@@ -133,6 +133,8 @@
 							<input
 								type="checkbox"
 								role="switch"
+								name="fnk-filter-{uid}-{g.uid}"
+								value={o.uid}
 								checked={isOn(o.uid)}
 								onchange={() => set(toggleOption(groups, selected, o.uid))}
 							/>
