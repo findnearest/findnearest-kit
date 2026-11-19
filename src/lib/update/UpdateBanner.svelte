@@ -10,6 +10,9 @@
 -->
 <script lang="ts">
 	import { updated } from '$app/state';
+	import { dev, version } from '$app/environment';
+	import { base } from '$app/paths';
+	import { hasNewerBuild } from './version-check.js';
 
 	interface Props {
 		/** The app's name, as it reads in the message: "A new version of {appName} is available". */
@@ -21,7 +24,28 @@
 	let { appName, show }: Props = $props();
 
 	let dismissed = $state(false);
-	let visible = $derived((show ?? updated.current) && !dismissed);
+
+	// Kit's poll alone never showed this on an iPhone: its 60s timer pauses while the browser is
+	// in the background, and its fetch can get a cached version.json. So also check, past the
+	// cache, the moment the tab comes back to the front.
+	let stale = $state(false);
+
+	async function checkNow() {
+		if (dev || stale || dismissed || show !== undefined || document.visibilityState !== 'visible') return;
+		// shortcut: assumes the default appDir '_app', which every house app uses; read config.kit.appDir if one changes it
+		if (await hasNewerBuild(`${base}/_app/version.json`, version)) stale = true;
+	}
+
+	$effect(() => {
+		document.addEventListener('visibilitychange', checkNow);
+		window.addEventListener('pageshow', checkNow); // back/forward cache restore
+		return () => {
+			document.removeEventListener('visibilitychange', checkNow);
+			window.removeEventListener('pageshow', checkNow);
+		};
+	});
+
+	let visible = $derived((show ?? (updated.current || stale)) && !dismissed);
 </script>
 
 {#if visible}

@@ -76,7 +76,10 @@ with SvelteKit polling for new builds in `svelte.config.js`:
 kit: { version: { pollInterval: 60_000 } }
 ```
 
-When the poll sees a newer build, a dark pill appears at the bottom centre: "A new version of
+It also checks `/_app/version.json` (past the HTTP cache) whenever the tab comes back to the front,
+because a phone pauses the poll's timer in the background.
+
+When either sees a newer build, a dark pill appears at the bottom centre: "A new version of
 {appName} is available", a Reload button and a dismiss button. It never reloads by itself, so
 nobody loses a half-finished edit. In dev the build version never changes, so it never shows.
 
