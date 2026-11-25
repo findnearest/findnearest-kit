@@ -251,11 +251,14 @@
 		@media (min-width: 1024px) {
 			.fn-results-layout.fn-layout-grid.fn-with-map .fn-cards-stack {
 				display: grid;
-				grid-template-rows: repeat(var(--_count, 10), 1fr);
+				/* Rows share the map's height, but never shrink below their content (a card with a
+				   status line, a short window): then the list grows instead of overflowing onto
+				   whatever follows it */
+				grid-template-rows: repeat(var(--_count, 10), minmax(min-content, 1fr));
 				/* Explicit 0-min column: the implicit `auto` track grows to a long title's
 				   min-content, pushing cards under the map instead of ellipsizing */
 				grid-template-columns: minmax(0, 1fr);
-				height: min(calc(100vh - 8rem), var(--_max-height));
+				min-height: min(calc(100vh - 8rem), var(--_max-height));
 				gap: 0;
 				overflow: visible;
 			}
@@ -729,9 +732,9 @@
 
 			.fn-results-layout.fn-layout-grid.fn-with-map .fn-cards-stack {
 				display: grid;
-				grid-template-rows: repeat(var(--_count, 10), 1fr);
+				grid-template-rows: repeat(var(--_count, 10), minmax(min-content, 1fr));
 				grid-template-columns: minmax(0, 1fr);
-				height: min(calc(100vh - 8rem), var(--_max-height));
+				min-height: min(calc(100vh - 8rem), var(--_max-height));
 				overflow: visible;
 			}
 
