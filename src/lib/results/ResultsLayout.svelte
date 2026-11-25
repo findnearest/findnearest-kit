@@ -147,6 +147,7 @@
 			--_info-text: var(--fnk-results-info-text, rgb(29 78 216));
 			--_surface: var(--fnk-results-surface, rgb(107 114 128));
 			--_surface-text: var(--fnk-results-surface-text, rgb(75 85 99));
+			--_open-text: var(--fnk-results-open-text, rgb(21 128 61));
 			--_badge-tint: var(--fnk-results-badge-tint, 15%);
 			--_alert-tint: var(--fnk-results-alert-tint, 10%);
 			--_error-opacity: 0.85;
@@ -173,6 +174,7 @@
 			);
 			--_warning-text: var(--fnk-results-warning-text, rgb(253 230 138));
 			--_info-text: var(--fnk-results-info-text, rgb(147 197 253));
+			--_open-text: var(--fnk-results-open-text, rgb(134 239 172));
 			--_surface-text: var(--fnk-results-surface-text, rgb(156 163 175));
 			--_badge-tint: var(--fnk-results-badge-tint, 20%);
 			--_alert-tint: var(--fnk-results-alert-tint, 15%);
@@ -432,6 +434,26 @@
 		.fn-results-layout :global(.fn-is-expanded .fn-card-number) {
 			background: var(--_marker-open);
 			transform: scale(1.1);
+		}
+
+		.fn-results-layout :global(.fn-card-heading) {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			min-width: 0;
+		}
+
+		.fn-results-layout :global(.fn-card-status) {
+			font-size: 0.8125rem;
+			font-weight: 600;
+			line-height: 1.3;
+			color: var(--_muted);
+		}
+		.fn-results-layout :global(.fn-card-status[data-tone='open']) {
+			color: var(--_open-text);
+		}
+		.fn-results-layout :global(.fn-card-status[data-tone='soon']) {
+			color: var(--_warning-text);
 		}
 
 		/* Font and weight are the parent site's heading style; the size is set in the frame layer */

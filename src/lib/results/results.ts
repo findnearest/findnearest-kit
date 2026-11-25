@@ -15,6 +15,13 @@ export interface ResultBadge {
 	critical?: boolean;
 }
 
+/** A card's live open status under its name, e.g. "Opens 8:30am". Time-sensitive: the app should
+ *  set it only in the browser (never server-rendered), and the card marks it data-nosnippet. */
+export interface ResultStatus {
+	text: string;
+	tone: 'open' | 'soon' | 'closed';
+}
+
 /** One line in an expanded card's alert banner, e.g. "Mon 25 Dec: Closed - Christmas Day". */
 export interface ResultAlert {
 	severity: ResultSeverity;
