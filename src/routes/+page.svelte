@@ -11,7 +11,7 @@
 	const live = geocoderSearch({ endpoint: '/geocoder/search', country: 'AU' });
 
 	// Simulated failures, to see every state without breaking a real geocoder
-	type Mode = 'live' | 'down' | 'slow' | 'empty' | 'jitter';
+	type Mode = 'live' | 'own' | 'down' | 'slow' | 'empty' | 'jitter';
 	let mode = $state<Mode>('live');
 	const wait = (ms: number, signal: AbortSignal) =>
 		new Promise<void>((resolve, reject) => {
@@ -31,7 +31,25 @@
 			await new Promise((r) => setTimeout(r, Math.max(0, 3000 - q.length * 200)));
 			return live(q, { ...opts, signal: new AbortController().signal });
 		}
-		return live(q, opts);
+		// 'own' still shows its sample when the live proxy isn't set up
+		const results = mode === 'own' ? await live(q, opts).catch(() => []) : await live(q, opts);
+		// A site's own location (source 'location', highlight: true) above the live results
+		if (mode === 'own') {
+			return [
+				{
+					source: 'location',
+					source_id: 'demo',
+					location_uid: 'demo',
+					highlight: true,
+					display_text: `Example Store - ${q}`,
+					suburb: null,
+					country: 'AU',
+					coordinates: results[0]?.coordinates ?? { lat: -33.87, lon: 151.21 }
+				},
+				...results.slice(0, 4)
+			];
+		}
+		return results;
 	};
 
 	let picked = $state<{ result: GeocoderResult; pin: boolean; kind: string } | null>(null);
@@ -48,6 +66,7 @@
 		Geocoder
 		<select bind:value={mode}>
 			<option value="live">Live (via /geocoder/search proxy)</option>
+			<option value="own">Live, with a site's own location first</option>
 			<option value="down">Down (503)</option>
 			<option value="slow">Slow (4 s)</option>
 			<option value="empty">Always empty</option>
