@@ -26,6 +26,7 @@ export {
 	type ResultAlert,
 	type ResultBadge,
 	type ResultSeverity,
+	type ResultStatus,
 	type ResultsLayoutMode
 } from './results/results.js';
 export { default as CategoryFilter } from './filters/CategoryFilter.svelte';

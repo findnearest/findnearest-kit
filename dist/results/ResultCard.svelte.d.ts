@@ -1,5 +1,5 @@
 import type { Snippet } from 'svelte';
-import { type ResultAlert, type ResultBadge, type ResultSeverity } from './results.js';
+import { type ResultAlert, type ResultBadge, type ResultSeverity, type ResultStatus } from './results.js';
 interface Props {
     /** Position in the list (0-based). */
     index: number;
@@ -11,6 +11,8 @@ interface Props {
     /** Tints the card: `error` for an unplanned closure, `surface` mutes a routine one. */
     severity?: ResultSeverity | null;
     badge?: ResultBadge | null;
+    /** Live open status under the name ("Open until 4:30pm"); set it only in the browser. */
+    status?: ResultStatus | null;
     /** Shown at the top of the open card. */
     alerts?: ResultAlert[];
     /** The profile page; omit it to leave out the "View … ›" link. */

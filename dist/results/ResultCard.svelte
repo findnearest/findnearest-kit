@@ -8,7 +8,7 @@
 -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { getResultsContext, type ResultAlert, type ResultBadge, type ResultSeverity } from './results.js';
+	import { getResultsContext, type ResultAlert, type ResultBadge, type ResultSeverity, type ResultStatus } from './results.js';
 
 	interface Props {
 		/** Position in the list (0-based). */
@@ -21,6 +21,8 @@
 		/** Tints the card: `error` for an unplanned closure, `surface` mutes a routine one. */
 		severity?: ResultSeverity | null;
 		badge?: ResultBadge | null;
+		/** Live open status under the name ("Open until 4:30pm"); set it only in the browser. */
+		status?: ResultStatus | null;
 		/** Shown at the top of the open card. */
 		alerts?: ResultAlert[];
 		/** The profile page; omit it to leave out the "View … ›" link. */
@@ -44,6 +46,7 @@
 		distance,
 		severity = null,
 		badge = null,
+		status = null,
 		alerts = [],
 		profileHref,
 		profileLabel = 'profile',
@@ -97,7 +100,13 @@
 		aria-expanded={expanded}
 	>
 		<span class="fn-card-number">{number}</span>
-		<h3 class="fn-card-title">{title}</h3>
+		<span class="fn-card-heading">
+			<h3 class="fn-card-title">{title}</h3>
+			{#if status}
+				<!-- data-nosnippet: a search engine that runs scripts must not quote a time-of-day status -->
+				<span class="fn-card-status" data-tone={status.tone} data-nosnippet>{status.text}</span>
+			{/if}
+		</span>
 		{#if badge}
 			<span class="fn-status-badge" data-severity={badge.severity}>
 				{#if badge.critical}
