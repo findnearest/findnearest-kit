@@ -536,8 +536,15 @@
 	li.fnk-active {
 		background: var(--_hover);
 	}
+	/* The site's own locations (source 'location', highlight: true) read apart from towns and addresses */
 	li.fnk-highlight {
 		box-shadow: inset 3px 0 0 var(--_accent);
+	}
+	li.fnk-highlight:not(.fnk-active) {
+		background: var(--_accent-soft);
+	}
+	li.fnk-highlight .fnk-text {
+		font-weight: 600;
 	}
 
 	.fnk-kind {
@@ -553,10 +560,13 @@
 		background: var(--_chip-bg);
 		border-radius: 3px;
 	}
-	.fnk-kind-town,
-	.fnk-kind-location {
+	.fnk-kind-town {
 		color: var(--_accent);
 		background: var(--_accent-soft);
+	}
+	.fnk-kind-location {
+		color: var(--_bg);
+		background: var(--_accent);
 	}
 	/* The name leads and takes the row; a long one ends in an ellipsis (its start is the part
 	   that matched what was typed) so the chip on the right stays whole and the same width. */
