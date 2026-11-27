@@ -8,4 +8,4 @@ export { default as ResultsLayout } from './results/ResultsLayout.svelte';
 export { default as ResultCard } from './results/ResultCard.svelte';
 export { formatDistance, type ResultAlert, type ResultBadge, type ResultSeverity, type ResultStatus, type ResultsLayoutMode } from './results/results.js';
 export { default as CategoryFilter } from './filters/CategoryFilter.svelte';
-export { defaultSelection, toggleOption, clearGroup, type FilterGroup, type FilterOption, type FilterStyle, type DescriptionDisplay } from './filters/filters.js';
+export { defaultSelection, toggleOption, clearGroup, onWhenEmpty, isShownOn, flipShown, isLastOn, type FilterGroup, type FilterOption, type FilterStyle, type DescriptionDisplay } from './filters/filters.js';

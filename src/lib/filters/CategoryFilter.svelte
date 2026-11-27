@@ -5,7 +5,10 @@
 
   Styles: `chips` (toggle buttons), `choice` (radio list for single selection, checkboxes for
   multi, with each option's description), `toggle` (a switch per option, e.g. "Only show
-  dealers with in-store display") and `menu` (a button that opens a checklist, for long lists).
+  dealers with in-store display"; side by side, wrapping) and `menu` (a button that opens a checklist, for long lists).
+  A multi-select `toggle` or `choice` group of two or more options reads "show these": with none
+  chosen (no filter) every option draws on, turning them all back on clears the group, and the
+  last one on can't be turned off (see `onWhenEmpty`). A lone switch is an opt-in and starts off.
   A single-selection `choice` group with no default option gets an "All" choice first, so it
   can be cleared, unless the group sets `showAllChoice: false`. Option descriptions show under the
   option, behind an info button with a tooltip (hover, keyboard focus or tap; Esc closes), or not
@@ -18,7 +21,16 @@
   loads: `<style>@layer fn-kit-look, captured, fn-kit-frame;</style>` in app.html.
 -->
 <script lang="ts">
-	import { clearGroup, toggleOption, type FilterGroup, type FilterOption } from './filters.js';
+	import {
+		clearGroup,
+		flipShown,
+		isLastOn,
+		isShownOn,
+		onWhenEmpty,
+		toggleOption,
+		type FilterGroup,
+		type FilterOption
+	} from './filters.js';
 
 	interface Props {
 		/** The groups to show, in order */
@@ -64,7 +76,9 @@
 		!!o.description && (g.descriptionDisplay ?? 'below') === where;
 
 	function choose(g: FilterGroup, optionUid: string) {
-		set(g.selection === 'single' ? [...clearGroup(g, selected), optionUid] : toggleOption(groups, selected, optionUid));
+		if (g.selection === 'single') set([...clearGroup(g, selected), optionUid]);
+		else if (onWhenEmpty(g)) set(flipShown(g, selected, optionUid));
+		else set(toggleOption(groups, selected, optionUid));
 	}
 
 	// One tooltip open at a time, by tap or click; hover and keyboard focus also show it (CSS)
@@ -110,7 +124,8 @@
 				<input
 					type={g.selection === 'single' ? 'radio' : 'checkbox'}
 					{name}
-					checked={isOn(o.uid)}
+					checked={isShownOn(g, selected, o.uid)}
+					disabled={isLastOn(g, selected, o.uid)}
 					onchange={() => choose(g, o.uid)}
 				/>
 				<span class="fnk-choice-text">
@@ -135,8 +150,10 @@
 								role="switch"
 								name="fnk-filter-{uid}-{g.uid}"
 								value={o.uid}
-								checked={isOn(o.uid)}
-								onchange={() => set(toggleOption(groups, selected, o.uid))}
+								checked={isShownOn(g, selected, o.uid)}
+								disabled={isLastOn(g, selected, o.uid)}
+								onchange={() =>
+									set(onWhenEmpty(g) ? flipShown(g, selected, o.uid) : toggleOption(groups, selected, o.uid))}
 							/>
 							<span class="fnk-switch-track" aria-hidden="true"><span class="fnk-switch-thumb"></span></span>
 							<span class="fnk-choice-text">
@@ -353,10 +370,16 @@
 			min-width: 0;
 		}
 
+		/* Side by side, wrapping, while there's room; one per line on a phone */
 		.fnk-toggles {
 			display: flex;
-			flex-direction: column;
-			gap: 0.5rem;
+			flex-wrap: wrap;
+			gap: 0.5rem 1.5rem;
+		}
+		@media (max-width: 480px) {
+			.fnk-toggles {
+				flex-direction: column;
+			}
 		}
 		.fnk-switch {
 			position: relative;
@@ -375,6 +398,10 @@
 			margin: 0;
 			opacity: 0;
 			cursor: pointer;
+		}
+		.fnk-switch input:disabled,
+		.fnk-switch:has(input:disabled) {
+			cursor: not-allowed;
 		}
 		.fnk-switch-track {
 			position: relative;
