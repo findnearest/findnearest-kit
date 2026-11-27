@@ -215,6 +215,7 @@
 			--_radius: var(--fnk-radius, 4px);
 			--_ring: var(--fnk-ring, 0 0 0 3px rgb(37 99 235 / 0.2));
 			--_shadow: var(--fnk-shadow, 0 4px 12px rgb(15 23 42 / 0.12));
+			--_hover: var(--fnk-hover, rgb(15 23 42 / 0.05));
 			color: var(--_fg);
 		}
 
@@ -279,6 +280,15 @@
 		}
 		.fnk-switch input:checked + .fnk-switch-track {
 			background: var(--_accent);
+		}
+		/* Invisible at rest; shows where the whole column can be clicked */
+		.fnk-switch-item {
+			border-radius: var(--_radius);
+		}
+		@media (hover: hover) {
+			.fnk-switch-item:hover:not(:has(input:disabled)) {
+				background: var(--_hover);
+			}
 		}
 		.fnk-switch-thumb {
 			background: #fff;
@@ -448,6 +458,12 @@
 			display: flex;
 			align-items: flex-start;
 			gap: 0.4rem;
+			margin: -0.375rem -0.5rem;
+			padding: 0.375rem 0.5rem;
+		}
+		/* The whole column is the switch's label, so a click anywhere in it toggles */
+		.fnk-switch-item > .fnk-switch {
+			flex: 1;
 		}
 
 		/* The info icon and its tooltip: shown on hover, keyboard focus, or a tap (fnk-tip-open) */
