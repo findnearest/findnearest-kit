@@ -31,3 +31,19 @@ export declare function defaultSelection(groups: FilterGroup[]): string[];
 export declare function toggleOption(groups: FilterGroup[], selected: string[], uid: string): string[];
 /** Clear one group's choices (a single-selection group's "All"). */
 export declare function clearGroup(group: FilterGroup, selected: string[]): string[];
+/**
+ * A group of switches or checkboxes reads "show these": with nothing in it chosen (no filter,
+ * every option's locations show) all its options draw on. Only multi-select groups of two or
+ * more; a lone switch ("Only dealers with in-store display") is an opt-in and starts off.
+ */
+export declare function onWhenEmpty(g: FilterGroup): boolean;
+/** Whether an option draws as on (checked) in its group. */
+export declare function isShownOn(g: FilterGroup, selected: string[], uid: string): boolean;
+/**
+ * Flip an option in an on-when-empty group as the visitor sees it. All on again clears the group,
+ * so no redundant filter is sent. The last one on can't go off (empty already means all): this
+ * returns the selection unchanged, and the component disables that control.
+ */
+export declare function flipShown(g: FilterGroup, selected: string[], uid: string): string[];
+/** The only option still on in an on-when-empty group, which can't be turned off. */
+export declare function isLastOn(g: FilterGroup, selected: string[], uid: string): boolean;
