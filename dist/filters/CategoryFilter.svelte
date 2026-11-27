@@ -5,7 +5,7 @@
 
   Styles: `chips` (toggle buttons), `choice` (radio list for single selection, checkboxes for
   multi, with each option's description), `toggle` (a switch per option, e.g. "Only show
-  dealers with in-store display"; side by side, wrapping) and `menu` (a button that opens a checklist, for long lists).
+  dealers with in-store display"; in equal-width columns, `--fnk-switch-col` wide) and `menu` (a button that opens a checklist, for long lists).
   A multi-select `toggle` or `choice` group of two or more options reads "show these": with none
   chosen (no filter) every option draws on, turning them all back on clears the group, and the
   last one on can't be turned off (see `onWhenEmpty`). A lone switch is an opt-in and starts off.
@@ -370,16 +370,12 @@
 			min-width: 0;
 		}
 
-		/* Side by side, wrapping, while there's room; one per line on a phone */
+		/* Equal-width columns from the left, as many as fit (one on a phone); auto-fill keeps
+		   empty tracks, so a short group doesn't stretch across a wide page */
 		.fnk-toggles {
-			display: flex;
-			flex-wrap: wrap;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--fnk-switch-col, 12rem)), 1fr));
 			gap: 0.5rem 1.5rem;
-		}
-		@media (max-width: 480px) {
-			.fnk-toggles {
-				flex-direction: column;
-			}
 		}
 		.fnk-switch {
 			position: relative;
