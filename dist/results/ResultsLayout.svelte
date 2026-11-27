@@ -698,6 +698,36 @@
 			height: 0.75rem;
 		}
 
+		/* A parent site's sibling spacing (BOQ: h3 + * { margin-top: 16px }) mustn't split name and status */
+		.fn-results-layout :global(.fn-card-status) {
+			margin: 0;
+		}
+
+		/* On a phone the badge drops under the name, so the name isn't cut to a few letters */
+		@media (max-width: 30rem) {
+			.fn-results-layout :global(.fn-card-header) {
+				display: grid;
+				grid-template-columns: auto minmax(0, 1fr) auto;
+				grid-template-rows: auto auto;
+				column-gap: 1rem;
+				row-gap: 0;
+			}
+			.fn-results-layout :global(.fn-card-number) {
+				grid-area: 1 / 1 / -1 / 2;
+			}
+			.fn-results-layout :global(.fn-card-heading) {
+				grid-area: 1 / 2;
+			}
+			.fn-results-layout :global(.fn-status-badge) {
+				grid-area: 2 / 2;
+				justify-self: start;
+				margin-top: 0.375rem;
+			}
+			.fn-results-layout :global(.fn-card-distance) {
+				grid-area: 1 / 3 / -1 / 4;
+			}
+		}
+
 		.fn-results-layout :global(.fn-card-body) {
 			display: block;
 		}
